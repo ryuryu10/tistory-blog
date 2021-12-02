@@ -1,8 +1,5 @@
-from json import load
 import nextcord
 from nextcord.ext import commands
-import asyncio
-import os
 
 client = commands.Bot(command_prefix='$')
 
@@ -11,34 +8,32 @@ class Confirm(nextcord.ui.View):
         super().__init__()
         self.value = None
 
-    @nextcord.ui.button(label="Confirm", style=nextcord.ButtonStyle.danger)
+    @nextcord.ui.button(label="빨간약", style=nextcord.ButtonStyle.danger)
     async def confirm(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        await interaction.response.send_message("Confirming", ephemeral=True)
-        self.value = True
+        await interaction.response.send_message("빨간약을 선택하셨군요")
+        self.value = "RED"
         self.stop()
 
-    @nextcord.ui.button(label="Cancel", style=nextcord.ButtonStyle.blurple)
+    @nextcord.ui.button(label="파란약", style=nextcord.ButtonStyle.blurple)
     async def cancel(self, button: nextcord.ui.Button, interaction: nextcord.Interaction):
-        await interaction.response.send_message("Cancelling", ephemeral=True)
-        self.value = False
+        await interaction.response.send_message("파란약을 선택하셨어요")
+        self.value = "BLUE"
         self.stop()
 
 @client.event
 async def on_ready():
-    pass
+    print('봇이 켜짐')
 
-@commands.command(name="button")
-async def button(self, ctx):
+@client.command(name="button")
+async def button(ctx):
     view = Confirm()
-    await ctx.send("Do you want to confirm somthing.", view=view)
+    await ctx.send("빨간약과 파란약이 있어요", view=view)
 
     await view.wait()
 
-    if not view.value == None:
-        print("Timed Out")
-    if view.value == True:
+    if view.value == "RED":
         print("Comfirmed")
-    if view.value == False:
+    if view.value == "BLUE":
         print("Cancelled")
 
-client.run('12')
+client.run('OTE0MzI1NDM4OTgwMDQ2ODQ5.YaLZ6w.wA03HrvTtbVIr5-6sELcUNzRQNg')
